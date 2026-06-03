@@ -1,34 +1,35 @@
-graph TD
-    subgraph genres [🟣 Таблица: genres]
-        direction TB
-        G1[🔑 id (PK)]
-        G2[📝 name]
-    end
+# 🎵 Music Database Schema
 
-    subgraph artists [ Таблица: artists]
-        direction TB
-        A1[🔑 id (PK)]
-        A2[🔗 genre_id (FK -> genres)]
-        A3[ name]
-    end
+## Entity-Relationship Diagram
 
-    subgraph albums [🟢 Таблица: albums]
-        direction TB
-        AL1[🔑 id (PK)]
-        AL2[🔗 artist_id (FK -> artists)]
-        AL3[📝 title]
-        AL4[ year]
-    end
+```mermaid
+erDiagram
+    GENRES ||--o{ ARTISTS : "has many"
+    ARTISTS ||--o{ ALBUMS : "creates many"
+    ALBUMS ||--o{ TRACKS : "contains many"
 
-    subgraph tracks [🟡 Таблица: tracks]
-        direction TB
-        T1[🔑 id (PK)]
-        T2[🔗 album_id (FK -> albums)]
-        T3[📝 title]
-        T4[⏱ duration_ms]
-        T5[📁 file_path]
-    end
+    GENRES {
+        int id PK
+        string name UK
+    }
 
-    genres -- "1 Жанр" --> "N Исполнителей" : artists
-    artists -- "1 Исполнитель" --> "N Альбомов" : albums
-    albums -- "1 Альбом" --> "N Треков" : tracks
+    ARTISTS {
+        int id PK
+        string name
+        int genre_id FK
+    }
+
+    ALBUMS {
+        int id PK
+        string title
+        int year
+        int artist_id FK
+    }
+
+    TRACKS {
+        int id PK
+        string title
+        int duration_ms
+        string file_path
+        int album_id FK
+    }
